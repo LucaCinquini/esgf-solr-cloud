@@ -1,0 +1,93 @@
+# Docker compose file to start an ESGF Solr Cloud cluster
+
+version: '3.4'
+
+services:
+
+  # Zookeeper used to store solr configuration and manage Solr cluster
+  zookeeper:
+    image: zookeeper:3.4
+    container_name: zookeeper
+    restart: always
+    expose:
+      - "2181"
+      - "2888"
+      - "3888"
+    ports:
+      - "2181:2181"
+    volumes:
+      - zk-data:/data
+      - zk-datalog:/datalog
+    # check from localhost: ruok? imok
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc 127.0.0.1 2181 | grep imok"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Solr node #1
+  solr-node-1:
+    image: esgfhublc/solr-cloud
+    container_name: solr-node-1
+    restart: always
+    ports:
+      - "8983:8983"
+    environment:
+      SOLR_HEAP: 1g 
+      INIT_SOLR_HOME: "yes" 
+      SOLR_HOME: /data/solr-home 
+      ZOOKEEPER_HOST: zookeeper 
+      ZOOKEEPER_PORT: 2181 
+    command:
+      - "solr-foreground"
+      - "-c"
+      - "-p"
+      - "8983"
+      - "-z"
+      - "zookeeper:2181"
+      - "-s"
+      - "/data/solr-home"
+    volumes:
+      - solr-home-1:/data/solr-home
+    depends_on:
+      - zookeeper
+
+  # Solr node #2
+  solr-node-2:
+    image: esgfhublc/solr-cloud
+    container_name: solr-node-2
+    restart: always
+    ports:
+      - "8984:8984"
+    environment:
+      SOLR_HEAP: 1g
+      INIT_SOLR_HOME: "yes"
+      SOLR_HOME: /data/solr-home
+      ZOOKEEPER_HOST: zookeeper
+      ZOOKEEPER_PORT: 2181
+    command:
+      - "solr-foreground"
+      - "-c"
+      - "-p"
+      - "8984"
+      - "-z"
+      - "zookeeper:2181"
+      - "-s"
+      - "/data/solr-home"
+    volumes:
+      - solr-home-2:/data/solr-home
+    depends_on:
+      - zookeeper
+
+# Use Docker volumes to store persistent data
+volumes:
+  zk-data:
+  zk-datalog:
+  solr-home-1: 
+  solr-home-2: 
+  
+networks: 
+  default:
+    external: 
+      name: solr-network 
+  

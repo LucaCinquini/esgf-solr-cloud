@@ -1,0 +1,27 @@
+# Docker compose file to configure an existing ESGF Solr Cloud cluster
+
+version: '3.4'
+
+services:
+
+  # Container that executes Solr configuration after Solr servers have started
+  solr-config:
+    image: solr:7.2
+    entrypoint: /usr/local/scripts/solr_init.sh
+    environment:
+      ZOOKEEPER_HOST: zookeeper
+      ZOOKEEPER_PORT: 2181
+      SOLR_HOST: solr-node-1
+      SOLR_PORT: 8983
+      SOLR_NUM_SHARDS: 2
+      SOLR_NUM_REPLICAS: 2
+      SOLR_MAX_SHARDS_PER_NODE: 2
+    volumes:
+      - ./scripts:/usr/local/scripts
+      - ./solr/solr-home:/esgf/config/solr-home
+   
+networks: 
+  default:
+    external: 
+      name: solr-network 
+  
