@@ -18,5 +18,8 @@ do
   fi
 done
 
-# upload configuration
-/opt/solr/bin/solr zk upconfig -z ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT} -n datasets -d /esgf/config/solr-home/datasets
+# upload updated configuration
+for collection in "datasets" "files" "aggregations"
+do
+  /opt/solr/bin/solr zk upconfig -z ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT} -n ${collection}  -d /esgf/config/solr-home/${collection}
+done
