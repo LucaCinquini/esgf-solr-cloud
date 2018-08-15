@@ -19,7 +19,9 @@ do
 done
 
 # upload updated configuration
+# must also reload each collections for changes to go into effect
 for collection in "datasets" "files" "aggregations"
 do
   /opt/solr/bin/solr zk upconfig -z ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT} -n ${collection}  -d /esgf/config/solr-home/${collection}
+  curl "http://${SOLR_HOST}:${SOLR_PORT}/solr/admin/collections?action=RELOAD&name=${collection}&wt=xml"
 done
