@@ -7,7 +7,9 @@ set -e
 /opt/docker-solr/scripts/wait-for-solr.sh --solr-url "http://${SOLR_HOST}:${SOLR_PORT}"
 
 # upload latest configuration to Zookeeper
-/opt/solr/bin/solr zk upconfig -z ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT} -d /esgf/solr-home/conf -confname esgf_config
+thisdir=$(basename "$PWD")
+parentdir="$(dirname "$thisdir")"
+/opt/solr/bin/solr zk upconfig -z ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT} -d ${parentdir}/solr/solr-home/conf -confname esgf_config
 
 # create collections, if not existing already, using the latest configuration
 shards="esgf-node.jpl.nasa.gov,esgf-node.llnl.gov,esgf-data.dkrz.de" # FIXME

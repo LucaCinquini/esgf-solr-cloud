@@ -7,10 +7,9 @@ services:
   # Container that executes Solr configuration after Solr servers have started
   # REQUIREMENT: num_shards * replication_factor <= num_nodes * max_shard_per_node
   solr-config:
-    image: solr:7.2
+    image: solr:7.4
     container_name: solr-config
     entrypoint: /usr/local/scripts/solr_config.sh
-    # entrypoint: ["tail", "-f", "/dev/null"]
     environment:
       ZOOKEEPER_HOST: zookeeper
       ZOOKEEPER_PORT: 2181
