@@ -8,6 +8,7 @@ metadata:
     
 spec:
 
+  # init container downloads source code distribution to shared volume
   initContainers:
     - name: git
       image: alpine/git  
@@ -19,6 +20,7 @@ spec:
         - name: src
           mountPath: /git
           
+  # container configured Solr Cloud cluster from up-to-date source code distribution (master branch)
   containers:
     - name: solr-config
       image: solr:7.4
