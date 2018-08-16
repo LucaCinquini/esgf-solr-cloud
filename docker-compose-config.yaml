@@ -5,9 +5,12 @@ version: '3.4'
 services:
 
   # Container that executes Solr configuration after Solr servers have started
+  # REQUIREMENT: num_shards * replication_factor <= num_nodes * max_shard_per_node
   solr-config:
     image: solr:7.2
+    container_name: solr-config
     entrypoint: /usr/local/scripts/solr_config.sh
+    # entrypoint: ["tail", "-f", "/dev/null"]
     environment:
       ZOOKEEPER_HOST: zookeeper
       ZOOKEEPER_PORT: 2181
@@ -15,10 +18,10 @@ services:
       SOLR_PORT: 8983
       SOLR_NUM_SHARDS: 2
       SOLR_NUM_REPLICAS: 2
-      SOLR_MAX_SHARDS_PER_NODE: 2
+      SOLR_MAX_SHARDS_PER_NODE: 3
     volumes:
       - ./scripts:/usr/local/scripts
-      - ./solr/solr-home:/esgf/config/solr-home
+      - ./solr/solr-home/conf:/esgf/solr-home/conf
    
 networks: 
   default:
