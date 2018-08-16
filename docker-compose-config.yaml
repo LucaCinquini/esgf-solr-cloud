@@ -7,7 +7,7 @@ services:
   # Container that executes Solr configuration after Solr servers have started
   solr-config:
     image: solr:7.2
-    entrypoint: /usr/local/scripts/solr_init.sh
+    entrypoint: /usr/local/scripts/solr_config.sh
     environment:
       ZOOKEEPER_HOST: zookeeper
       ZOOKEEPER_PORT: 2181
