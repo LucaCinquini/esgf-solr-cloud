@@ -25,10 +25,7 @@ spec:
     - name: solr-config
       image: solr:7.4
       command:
-        #- /src/esgf-solr-cloud/scripts/solr_config.sh
-        - tail
-        - -f
-        - /dev/null
+        - /src/esgf-solr-cloud/scripts/solr_config.sh
       env:
         - name: SOLR_HOST
           value: solr-node-1
