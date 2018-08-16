@@ -2,7 +2,7 @@
 ## Solr image with custom configuration
 #####
 
-FROM solr:7.2
+FROM solr:7.4
 
 USER root
 
