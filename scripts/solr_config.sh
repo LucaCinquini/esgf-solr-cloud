@@ -7,6 +7,7 @@ set -e
 /opt/docker-solr/scripts/wait-for-solr.sh --solr-url "http://${SOLR_HOST}:${SOLR_PORT}"
 
 # create collections, if not existing already
+# also disable schemaless feature
 for collection in "datasets" "files" "aggregations"
 do
   # try querying this collection to see if it exists
