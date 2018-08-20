@@ -41,6 +41,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: solr-node
+  labels:
+    stack: esgf-solr-cloud
+    component: solr
 spec:
   selector:
     matchLabels:
