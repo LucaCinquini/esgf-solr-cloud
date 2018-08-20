@@ -16,5 +16,5 @@ spec:
       paths:
       - path: /solr
         backend:
-          serviceName: solr-node-1
+          serviceName: solr-load-balancer
           servicePort: 8983

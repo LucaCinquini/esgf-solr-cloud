@@ -1,0 +1,99 @@
+# ClusterIP service used to load-balance across all pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr-load-balancer
+  labels:
+    stack: esgf-solr-cloud
+    component: solr
+    role: load-balancer
+spec:
+  type: ClusterIP
+  ports:
+    - name: solr
+      port: 8983
+  selector:
+    stack: esgf-solr-cloud
+    component: solr
+
+---
+
+# Headless service to provide networking across pods in the cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr-headless-service
+  labels:
+    stack: esgf-solr-cloud
+    component: solr
+    role: headless
+spec:
+  ports:
+  - port: 8983
+    name: solr
+  clusterIP: None
+  selector:
+    stack: esgf-solr-cloud
+    component: solr
+
+---
+
+# StatefulSet managing Pods
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: solr-cloud
+spec:
+  selector:
+    matchLabels:
+      stack: esgf-solr-cloud
+      component: solr
+  serviceName: "solr-headless-service"
+  replicas: 2 
+  template:
+    metadata:
+      labels:
+        stack: esgf-solr-cloud
+        component: solr
+    spec: 
+      containers:
+        - name: solr-node
+          image: esgfhublc/solr-cloud
+          args: ["solr-foreground", "-c", "-p", "8983", "-z", "zookeeper:2181", "-s", "/data/solr-home"]
+          ports:
+            - name: solr
+              containerPort: 8983
+          #readinessProbe:
+          #  httpGet: &probe
+          #    path: /solr/admin/info/system?wt=json
+          #    port: 8983
+          #  initialDelaySeconds: 10
+          #  periodSeconds: 10
+          #livenessProbe:
+          #  httpGet: *probe
+          #  initialDelaySeconds: 60
+          #  periodSeconds: 10
+          env:
+            - name: SOLR_HOME
+              value: /data/solr-home 
+            - name: SOLR_HEAP
+              value: 1g
+            - name: INIT_SOLR_HOME
+              value: "yes"
+            - name: ZOOKEEPER_HOST
+              value: zookeeper
+            - name: ZOOKEEPER_PORT
+              value: "2181"
+          volumeMounts:
+            - name: solr-home
+              mountPath: /data/solr-home
+
+  volumeClaimTemplates:
+  - metadata:
+      name: solr-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      #storageClassName: "my-storage-class"
+      resources:
+        requests:
+          storage: 1Gi
