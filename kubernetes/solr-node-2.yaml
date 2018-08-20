@@ -7,7 +7,7 @@ metadata:
     component: solr
     solr-node: node-2
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - name: solr
       port: 8983
