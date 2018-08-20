@@ -9,8 +9,8 @@ services:
   solr-config:
     image: solr:7.4
     container_name: solr-config
-    #entrypoint: /src/esgf-solr-cloud/scripts/solr_config.sh
-    entrypoint: ["tail", "-f", "/dev/null"]
+    entrypoint: /src/esgf-solr-cloud/scripts/solr_config.sh
+    #entrypoint: ["tail", "-f", "/dev/null"]
     environment:
       ZOOKEEPER_HOST: zookeeper
       ZOOKEEPER_PORT: 2181
