@@ -35,8 +35,10 @@ spec:
           command:
             - /src/esgf-solr-cloud/scripts/solr_harvest.sh
           env:
-            SOLR_SOURCE_URL: "http://esgf-node.jpl.nasa.gov/solr"
-            SOLR_TARGET_URL: "http://solr-load-balancer:8983/solr"
+            - name: SOLR_SOURCE_URL
+              value: http://esgf-node.llnl.gov/solr
+            - name: SOLR_TARGET_URL
+              value: http://solr-load-balancer:8983/solr
           volumeMounts:
             - name: src
               mountPath: /src
