@@ -8,7 +8,8 @@ set -e
 cd /usr/local/esgfpy-publish
 
 # loop over collections
-for collection in "datasets" "files" "aggregations"
+#for collection in "datasets" "files" "aggregations" # FIXME
+for collection in "datasets"
 do
-  python esgfpy/migrate/solr2solr.py --core ${collection} ${SOLR_SOURCE_URL} ${SOLR_TARGET_URL} --max 1000
+  python esgfpy/migrate/solr2solr.py --core ${collection} ${SOLR_SOURCE_URL} ${SOLR_TARGET_URL}
 done
