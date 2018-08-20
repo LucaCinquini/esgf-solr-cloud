@@ -6,11 +6,14 @@ services:
   harvester:
     image: esgfhublc/esgfpy-publish
     container_name: harvester
-    #entrypoint: /usr/local/bin/solr_harvest.sh
-    entrypoint: ["tail", "-f", "/dev/null"]
+    entrypoint: /usr/local/bin/solr_harvest.sh
+    #entrypoint: ["tail", "-f", "/dev/null"]
     volumes:
       # script in parent directory
       - ${PWD}/../scripts/solr_harvest.sh:/usr/local/bin/solr_harvest.sh
+    environment:
+      SOLR_SOURCE_URL: "http://esgf-node.jpl.nasa.gov/solr"
+      SOLR_TARGET_URL: "http://solr-node-1:8983/solr"
     
    
 networks: 

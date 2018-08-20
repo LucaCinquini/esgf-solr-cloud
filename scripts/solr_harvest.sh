@@ -1,8 +1,14 @@
 #!/bin/bash
+
 # Script to harvest a remote Solr server
+# Uses env variables SOLR_SOURCE_URL and SOLR_TARGET_URL
 
 set -e
 
 cd /usr/local/esgfpy-publish
-python esgfpy/migrate/solr2solr.py --core datasets http://esgf-node.jpl.nasa.gov/solr http://solr-node-1:8983/solr
 
+# loop over collections
+for collection in "datasets" "files" "aggregations"
+do
+  python esgfpy/migrate/solr2solr.py --core ${collection} ${SOLR_SOURCE_URL} ${SOLR_TARGET_URL}
+done
