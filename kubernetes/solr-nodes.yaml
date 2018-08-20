@@ -92,6 +92,9 @@ spec:
   volumeClaimTemplates:
   - metadata:
       name: solr-home
+      labels:
+        stack: esgf-solr-cloud
+        component: solr        
     spec:
       accessModes: [ "ReadWriteOnce" ]
       #storageClassName: "my-storage-class"

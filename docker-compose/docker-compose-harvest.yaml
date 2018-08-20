@@ -5,7 +5,7 @@ services:
 
   harvester:
     image: esgfhublc/esgfpy-publish
-    container_name: harvester
+    container_name: solr-harvest
     entrypoint: /usr/local/bin/solr_harvest.sh
     #entrypoint: ["tail", "-f", "/dev/null"]
     volumes:

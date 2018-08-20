@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: solr-harvest-
+  labels:
+    stack: esgf-solr-cloud
+    component: harvest
+  
+spec:
+  backoffLimit: 4
+  activeDeadlineSeconds: 120
+  template:
+    spec:
+    
+      restartPolicy: Never
+      
+      # the init container downloads this source code distribution to a shared volume
+      initContainers:
+        - name: git
+          image: alpine/git
+          command:
+            - git
+            - clone
+            - https://github.com/LucaCinquini/esgf-solr-cloud.git
+          volumeMounts:
+            - name: src
+              mountPath: /git
+      
+          
+      # this container runs the harvesting script
+      # to read records from the source Solr and write them to the target Solr
+      containers:
+        - name: solr-harvest
+          image: esgfhublc/esgfpy-publish
+          command:
+            - /src/esgf-solr-cloud/scripts/solr_harvest.sh
+          env:
+            SOLR_SOURCE_URL: "http://esgf-node.jpl.nasa.gov/solr"
+            SOLR_TARGET_URL: "http://solr-load-balancer:8983/solr"
+          volumeMounts:
+            - name: src
+              mountPath: /src
+      
+      volumes:
+        - name: src
+          emptyDir: {}
