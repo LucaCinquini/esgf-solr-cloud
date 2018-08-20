@@ -6,7 +6,6 @@ metadata:
   labels:
     stack: esgf-solr-cloud
     component: solr
-    role: load-balancer
 spec:
   type: ClusterIP
   ports:
@@ -18,7 +17,7 @@ spec:
 
 ---
 
-# Headless service to provide networking across pods in the cluster
+# Headless service to provide stable networking for pods in the cluster
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,7 +25,6 @@ metadata:
   labels:
     stack: esgf-solr-cloud
     component: solr
-    role: headless
 spec:
   ports:
   - port: 8983
@@ -42,7 +40,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: solr-cloud
+  name: solr-node
 spec:
   selector:
     matchLabels:
@@ -57,22 +55,22 @@ spec:
         component: solr
     spec: 
       containers:
-        - name: solr-node
+        - name: solr-cloud
           image: esgfhublc/solr-cloud
           args: ["solr-foreground", "-c", "-p", "8983", "-z", "zookeeper:2181", "-s", "/data/solr-home"]
           ports:
             - name: solr
               containerPort: 8983
-          #readinessProbe:
-          #  httpGet: &probe
-          #    path: /solr/admin/info/system?wt=json
-          #    port: 8983
-          #  initialDelaySeconds: 10
-          #  periodSeconds: 10
-          #livenessProbe:
-          #  httpGet: *probe
-          #  initialDelaySeconds: 60
-          #  periodSeconds: 10
+          readinessProbe:
+            httpGet: &probe
+              path: /solr/admin/info/system?wt=json
+              port: 8983
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: *probe
+            initialDelaySeconds: 60
+            periodSeconds: 10
           env:
             - name: SOLR_HOME
               value: /data/solr-home 
