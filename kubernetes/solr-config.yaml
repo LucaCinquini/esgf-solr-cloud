@@ -4,8 +4,7 @@ metadata:
   name: solr-config
   labels:
     stack: esgf-solr-cloud
-    component: solr
-    solr-node: node-1
+    component: config
   
 spec:
   backoffLimit: 4
