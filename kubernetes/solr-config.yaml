@@ -8,10 +8,12 @@ metadata:
     
 spec:
 
+  restartPolicy: OnFailure
+
   # init container downloads source code distribution to shared volume
   initContainers:
     - name: git
-      image: alpine/git  
+      image: alpine/git
       command:
         - git
         - clone
