@@ -7,8 +7,7 @@ metadata:
     component: harvest
   
 spec:
-  backoffLimit: 4
-  activeDeadlineSeconds: 120
+  backoffLimit: 2
   template:
     spec:
     
