@@ -1,3 +1,4 @@
+# Service that makes Zookeeper reachable by Solr pods in the cluster
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,6 +20,7 @@ spec:
     
 ---
 
+# Zookeeper managed pod
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -55,7 +57,39 @@ spec:
               mountPath: /datalog
       volumes:
         - name: zk-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: zk-data
         - name: zk-datalog
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: zk-datalog
+       
+---
 
+# Volumes to persist Zookeeper data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zk-data
+  labels:
+    stack: esgf-solr-cloud
+    component: zookeeper
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zk-datalog
+  labels:
+    stack: esgf-solr-cloud
+    component: zookeeper
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
