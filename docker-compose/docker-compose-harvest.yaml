@@ -1,3 +1,9 @@
+# Docker compose file to harvest records from a remote Solr server into the currenlt running Solr Cloud cluster.
+
+# Requires the following env variable to be set (values are example):
+# export SOLR_SOURCE_URL=http://esgf-node.jpl.nasa.gov/solr
+# export SOLR_TARGET_URL=http://solr-node-1:8983/solr
+# export COLLECTIONS="datasets files"
 
 version: '3.4'
 
@@ -6,15 +12,7 @@ services:
   harvester:
     image: esgfhublc/esgfpy-publish
     container_name: solr-harvest
-    entrypoint: /usr/local/bin/solr_harvest.sh
-    #entrypoint: ["tail", "-f", "/dev/null"]
-    volumes:
-      # script in parent directory
-      - ${PWD}/../scripts/solr_harvest.sh:/usr/local/bin/solr_harvest.sh
-    environment:
-      SOLR_SOURCE_URL: "http://esgf-node.jpl.nasa.gov/solr"
-      SOLR_TARGET_URL: "http://solr-node-1:8983/solr"
-    
+    entrypoint: /usr/local/esgfpy-publish/scripts/solr_harvest.sh ${SOLR_SOURCE_URL} ${SOLR_TARGET_URL} ${COLLECTIONS}
    
 networks: 
   default:
