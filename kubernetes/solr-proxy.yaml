@@ -1,0 +1,18 @@
+# LoadBalancer service used to load-balance across all pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr-proxy
+  labels:
+    stack: esgf-solr-cloud
+    component: solr
+spec:
+  type: LoadBalancer
+  loadBalancerIP: "35.226.12.169"
+  ports:
+    - name: solr
+      port: 80
+      targetPort: 8983
+  selector:
+    stack: esgf-solr-cloud
+    component: solr

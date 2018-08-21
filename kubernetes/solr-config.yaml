@@ -7,8 +7,8 @@ metadata:
     component: config
   
 spec:
-  backoffLimit: 4
-  activeDeadlineSeconds: 120
+  backoffLimit: 2
+  #activeDeadlineSeconds: 120
   template:
     spec:
     
