@@ -20,7 +20,7 @@ services:
       SOLR_NUM_REPLICAS: 2
       SOLR_MAX_SHARDS_PER_NODE: 3
     volumes:
-      # parent directory
+      # mount script from parent directory into container
       - ${PWD}/..:/src/esgf-solr-cloud
    
 networks: 
