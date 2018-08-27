@@ -8,7 +8,7 @@ metadata:
     component: solr
 spec:
   type: LoadBalancer
-  loadBalancerIP: "35.226.12.169"
+  loadBalancerIP: "35.224.146.21"
   ports:
     - name: solr
       port: 80
