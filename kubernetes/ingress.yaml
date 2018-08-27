@@ -11,7 +11,7 @@ metadata:
     component: proxy
 spec:
   rules:
-  - host: esgf-solr-cloud.192.168.64.79.xip.io
+  - host: esgf-solr-cloud.192.168.64.80.xip.io
     http:
       paths:
       - path: /solr
