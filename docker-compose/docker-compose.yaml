@@ -33,7 +33,7 @@ services:
     ports:
       - "8983:8983"
     environment:
-      SOLR_HEAP: 1g 
+      SOLR_HEAP: 2g 
       INIT_SOLR_HOME: "yes" 
       SOLR_HOME: /data/solr-home 
       ZOOKEEPER_HOST: zookeeper 
@@ -60,7 +60,7 @@ services:
     ports:
       - "8984:8984"
     environment:
-      SOLR_HEAP: 1g
+      SOLR_HEAP: 2g
       INIT_SOLR_HOME: "yes"
       SOLR_HOME: /data/solr-home
       ZOOKEEPER_HOST: zookeeper
