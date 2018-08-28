@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: solr-harvest-
+  generateName: solr-sync-
   labels:
     stack: esgf-solr-cloud
-    component: harvest
+    component: sync
   
 spec:
   backoffLimit: 2
@@ -13,21 +13,18 @@ spec:
     
       restartPolicy: Never
             
-      # this container runs the harvesting script
-      # to read records from the source Solr and write them to the target Solr
+      # this container runs the script
+      # to sync records between a source Solr and a target Solr
       containers:
-        - name: solr-harvest
+        - name: solr-sync
           image: esgfhublc/esgfpy-publish
           command:
-            - /usr/local/esgfpy-publish/scripts/solr_harvest.sh 
+            - /usr/local/esgfpy-publish/scripts/solr_sync.sh 
             - "$(SOLR_SOURCE_URL)"
             - "$(SOLR_TARGET_URL)"
-            - "$(COLLECTIONS)"
           env:
             - name: SOLR_SOURCE_URL
               # important: must use 'https'
               value: https://esgf-node.jpl.nasa.gov/solr
             - name: SOLR_TARGET_URL
               value: http://solr-load-balancer:8983/solr
-            - name: COLLECTIONS
-              value: "datasets files"

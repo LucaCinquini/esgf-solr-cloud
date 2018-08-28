@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: solr-migrate-
+  labels:
+    stack: esgf-solr-cloud
+    component: migrate
+  
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+    
+      restartPolicy: Never
+            
+      # this container runs the migrating script
+      # to read records from the source Solr and write them to the target Solr
+      containers:
+        - name: solr-migrate
+          image: esgfhublc/esgfpy-publish
+          command:
+            - /usr/local/esgfpy-publish/scripts/solr_migrate.sh 
+            - "$(SOLR_SOURCE_URL)"
+            - "$(SOLR_TARGET_URL)"
+            - "$(COLLECTIONS)"
+          env:
+            - name: SOLR_SOURCE_URL
+              # important: must use 'https'
+              value: https://esgf-node.jpl.nasa.gov/solr
+            - name: SOLR_TARGET_URL
+              value: http://solr-load-balancer:8983/solr
+            - name: COLLECTIONS
+              value: "datasets files"
