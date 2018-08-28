@@ -30,4 +30,4 @@ spec:
             - name: SOLR_TARGET_URL
               value: http://solr-load-balancer:8983/solr
             - name: COLLECTIONS
-              value: "datasets files"
+              value: "datasets files aggregations"
