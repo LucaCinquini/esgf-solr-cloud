@@ -41,7 +41,7 @@ spec:
             - name: SOLR_NUM_SHARDS
               value: "3"
             - name: SOLR_NUM_REPLICAS
-              value: "2"
+              value: "3"
             - name: SOLR_MAX_SHARDS_PER_NODE
               value: "3"
             - name: ZOOKEEPER_HOST
