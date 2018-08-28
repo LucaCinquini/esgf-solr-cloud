@@ -25,7 +25,8 @@ spec:
             - "$(COLLECTIONS)"
           env:
             - name: SOLR_SOURCE_URL
-              value: http://esgf-node.jpl.nasa.gov/solr
+              # important: must use 'https'
+              value: https://esgf-node.jpl.nasa.gov/solr
             - name: SOLR_TARGET_URL
               value: http://solr-load-balancer:8983/solr
             - name: COLLECTIONS
