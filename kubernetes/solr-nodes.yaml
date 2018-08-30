@@ -78,7 +78,7 @@ spec:
             - name: SOLR_HOME
               value: /data/solr-home 
             - name: SOLR_HEAP
-              value: 2g
+              value: 4g
             - name: INIT_SOLR_HOME
               value: "yes"
             - name: ZOOKEEPER_HOST
