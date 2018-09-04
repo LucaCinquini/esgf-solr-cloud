@@ -1,0 +1,28 @@
+# Docker compose file to harvest records from a remote Solr server into the currently running Solr Cloud cluster.
+
+# Requires the following env variable to be set (values are example):
+
+# export SOLR_SOURCE_URL=http://esgf-node.jpl.nasa.gov/solr
+# export SOLR_TARGET_URL=http://solr-node-1:8983/solr
+# export COLLECTIONS="datasets files aggregations"
+
+# To run the container through docker-compose:
+# docker-compose -f docker-compose-migrate.yaml up
+
+# Alternatively, the container can be run directly as:
+# docker run -it --rm --network solr-network esgfhub/esgfpy-solr /usr/local/esgfpy-solr/scripts/solr_migrate.sh ${SOLR_SOURCE_URL} ${SOLR_TARGET_URL} ${COLLECTIONS}
+
+version: '3.4'
+
+services:
+
+  solr-migrator:
+    image: esgfhub/esgfpy-solr
+    container_name: solr-migrator
+    entrypoint: /usr/local/esgfpy-solr/scripts/solr_migrate.sh ${SOLR_SOURCE_URL} ${SOLR_TARGET_URL} ${COLLECTIONS}
+   
+networks: 
+  default:
+    external: 
+      name: solr-network 
+  
