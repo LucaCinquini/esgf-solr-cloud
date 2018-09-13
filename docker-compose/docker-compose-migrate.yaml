@@ -2,9 +2,11 @@
 
 # Requires the following env variable to be set (values are example):
 
-# export SOLR_SOURCE_URL=http://esgf-node.jpl.nasa.gov/solr
+# export SOLR_SOURCE_URL=https://esgf-node.jpl.nasa.gov/solr
 # export SOLR_TARGET_URL=http://solr-node-1:8983/solr
 # export COLLECTIONS="datasets files aggregations"
+# 
+# Note: the SOLR_TARGET_URL is the URL of the Docker service started by docker-compose.
 
 # To run the container through docker-compose:
 # docker-compose -f docker-compose-migrate.yaml up
