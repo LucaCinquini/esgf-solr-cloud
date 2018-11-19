@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/ssl-passthrough: "true"
+    ingress.kubernetes.io/report-node-internal-ip-address: "true"
+  name: esgf-solr-cloud-ingress
+  labels:
+    stack: esgf-solr-cloud
+    component: proxy
+spec:
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - path: /solr
+        backend:
+          serviceName: solr-load-balancer
+          servicePort: 8983
