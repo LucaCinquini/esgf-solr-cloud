@@ -1,9 +1,11 @@
+# IMPORTANT: the chart must be installed with the "--wait" option
+# so that this hook is run AFTER all pods in the Solr stateful set are in the ready state
 apiVersion: batch/v1
 kind: Job
 metadata:
   generateName: solr-config-
   annotations:
-    "helm.sh/hook": post-install
+    "helm.sh/hook": "post-install"
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": hook-succeeded
   labels:
