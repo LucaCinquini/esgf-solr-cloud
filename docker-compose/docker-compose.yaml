@@ -58,7 +58,7 @@ services:
     container_name: solr-node-2
     restart: always
     ports:
-      - "8984:8984"
+      - "8984:8983"
     environment:
       SOLR_HEAP: 2g
       INIT_SOLR_HOME: "yes"
@@ -78,6 +78,20 @@ services:
       - solr-home-2:/data/solr-home
     depends_on:
       - zookeeper
+      
+  # ESGF search web app
+  esgf-search:
+    image: esgfhublc/esgf-search
+    container_name: esgf-search
+    build:
+      context: ../esgf-search
+    restart: always
+    ports:
+      - "8080:8080" 
+    depends_on:
+      - zookeeper
+      - solr-node-1
+      - solr-node-2
 
 # Use Docker volumes to store persistent data
 volumes:
