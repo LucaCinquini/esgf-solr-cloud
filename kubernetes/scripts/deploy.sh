@@ -8,12 +8,16 @@ SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PARENT_DIR="$(dirname $SOURCE_DIR)"
 cd $PARENT_DIR
 
-# create Zookeeper deployment
-kubectl create -f zookeeper.yaml
+# create Zookeeper stateful set
+kubectl create -f zookeeper-quorum.yaml
 
-# create Solrs statefulset
+# create Solr stateful set
 sleep 5
 kubectl create -f solr-nodes.yaml
+
+# create ESGF Search web application
+sleep 5
+kubectl create -f esgf-search.yaml
 
 # minikube: create ingress to cluster
 #kubectl create -f ingress.yaml
