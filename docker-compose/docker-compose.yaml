@@ -88,6 +88,9 @@ services:
     restart: always
     ports:
       - "8080:8080" 
+    # add alias for service "solr-node-1"
+    links: 
+      - "solr-node-1:solr-load-balancer"
     depends_on:
       - zookeeper
       - solr-node-1
