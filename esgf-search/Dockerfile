@@ -11,8 +11,10 @@ RUN rm -rf /usr/local/tomcat/webapps/ROOT \
            /usr/local/tomcat/webapps/manager
 
 # Download war file
-RUN cd /tmp &&\
-    curl -O https://aims1.llnl.gov/esgf/dist/esg-search/esg-search.war
+# FIXME
+#RUN cd /tmp &&\
+#    curl -O https://aims1.llnl.gov/esgf/dist/esg-search/esg-search.war
+COPY esg-search.war /tmp/esg-search.war
 RUN cd /tmp && unzip esg-search.war -d /usr/local/tomcat/webapps/esg-search
     
 # copy configuration files

@@ -1,7 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<shards xmlns="http://www.esgf.org/whitelist">
-
-    <!-- local ESGF node -->
-    <value>solr-node-1:8983/solr</value>
-
-</shards>
+<shards xmlns="http://www.esgf.org/whitelist" />
