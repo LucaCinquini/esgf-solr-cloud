@@ -1,0 +1,44 @@
+# ESGF Search service
+apiVersion: v1
+kind: Service
+metadata:
+  name: esgf-search
+  labels:
+    stack: esgf-solr-cloud
+    component: esgf-search
+spec:
+  ports:
+  - name: tomcat-port
+    port: 8080
+  selector:
+    stack: esgf-solr-cloud
+    component: esgf-search
+    
+---
+
+# ESGF Search deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: esgf-search
+  labels:
+    stack: esgf-solr-cloud
+    component: esgf-search
+spec:
+  selector:
+    matchLabels:
+      stack: esgf-solr-cloud
+      component: esgf-search
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        stack: esgf-solr-cloud
+        component: esgf-search
+    spec:
+      containers:
+        - name: esgf-search
+          image: esgfhublc/esgf-search
+          ports:
+            - name: tomcat-port
+              containerPort: 8080
