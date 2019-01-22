@@ -12,7 +12,7 @@ cd $PARENT_DIR
 kubectl create -f zookeeper-quorum.yaml
 
 # create Solr stateful set
-sleep 5
+sleep 10
 kubectl create -f solr-nodes.yaml
 
 # create ESGF Search web application
