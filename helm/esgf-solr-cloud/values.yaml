@@ -1,13 +1,12 @@
 # Default values for esgf-solr-cloud.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
 zookeeper:
-  storage: "10Gi"
+  storage: "2Gi"
 
 solr:
   numNodes: 3
-  storage: "10Gi"
+  storage: "2Gi"
+  heap: "1g"
   numShards: 3
   numShardReplicas: 3
   maxShardsPerNode: 3
