@@ -2,6 +2,7 @@
 
 zookeeper:
   storage: "2Gi"
+  numNodes: 3
 
 solr:
   numNodes: 3
