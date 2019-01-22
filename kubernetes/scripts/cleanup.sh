@@ -6,4 +6,4 @@ kubectl delete deployment,svc,job,ingress,statefulset -l stack=esgf-solr-cloud
 
 kubectl delete job solr-harvester
 
-kubectl delete pvc -l stack=esgf-solr-cloud
+kubectl delete pvc,pv -l stack=esgf-solr-cloud

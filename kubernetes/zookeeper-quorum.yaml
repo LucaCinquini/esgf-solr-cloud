@@ -1,0 +1,155 @@
+# Headless service needed by Zookeeper stateful set
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper-headless-service
+  labels:
+    stack: esgf-solr-cloud
+    component: zookeeper
+spec:
+  ports:
+  - port: 2888
+    name: zk-server-port
+  - port: 3888
+    name: zk-elect-port
+  clusterIP: None
+  selector:
+    stack: esgf-solr-cloud
+    component: zookeeper
+---
+# Cluster service to connect with Solr nodes
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+  labels:
+    stack: esgf-solr-cloud
+    component: zookeeper
+spec:
+  ports:
+  - port: 2181
+    name: zk-client-port
+  selector:
+    stack: esgf-solr-cloud
+    component: zookeeper
+---
+# Pod Disruption Budget
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: zookeeper-pdb
+  labels:
+    stack: esgf-solr-cloud
+    component: zookeeper
+spec:
+  selector:
+    matchLabels:
+      stack: esgf-solr-cloud
+      component: zookeeper
+  maxUnavailable: 1
+---
+# Zookeper stateful set: managed pods with persistent identity
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zk
+  labels:
+    stack: esgf-solr-cloud
+    component: zookeeper
+spec:
+  selector:
+    matchLabels:
+      stack: esgf-solr-cloud
+      component: zookeeper
+  serviceName: zookeeper-headless-service
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        stack: esgf-solr-cloud
+        component: zookeeper
+    spec:
+# constraint to deploy each pod to a different node in the clustyer
+#      affinity:
+#        podAntiAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            - labelSelector:
+#                matchExpressions:
+#                  - key: "app"
+#                    operator: In
+#                    values:
+#                    - zk
+#              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: zookeeper
+        imagePullPolicy: Always
+        image: "k8s.gcr.io/kubernetes-zookeeper:1.0-3.4.10"
+        # image: zookeeper:3.4
+#        resources:
+#          requests:
+#            memory: "1Gi"
+#            cpu: "0.2"
+        ports:
+        - containerPort: 2181
+          name: zk-client-port
+        - containerPort: 2888
+          name: zk-server-port
+        - containerPort: 3888
+          name: zk-elect-port
+        command:
+        - sh
+        - -c
+        - "start-zookeeper \
+          --servers=3 \
+          --data_dir=/var/lib/zookeeper/data \
+          --data_log_dir=/var/lib/zookeeper/data/log \
+          --conf_dir=/opt/zookeeper/conf \
+          --client_port=2181 \
+          --election_port=3888 \
+          --server_port=2888 \
+          --tick_time=2000 \
+          --init_limit=10 \
+          --sync_limit=5 \
+          --heap=512M \
+          --max_client_cnxns=60 \
+          --snap_retain_count=3 \
+          --purge_interval=12 \
+          --max_session_timeout=40000 \
+          --min_session_timeout=4000 \
+          --log_level=INFO"
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "zookeeper-ready 2181"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "zookeeper-ready 2181"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: zk-data
+          mountPath: /var/lib/zookeeper
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: zk-data
+      labels:
+        stack: esgf-solr-cloud
+        component: zookeeper
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

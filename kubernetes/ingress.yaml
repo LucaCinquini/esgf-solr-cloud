@@ -11,10 +11,14 @@ metadata:
     component: proxy
 spec:
   rules:
-  - host: esgf-solr-cloud.192.168.64.92.xip.io
+  - host: esgf-solr-cloud.192.168.64.4.xip.io
     http:
       paths:
       - path: /solr
         backend:
           serviceName: solr-load-balancer
           servicePort: 8983
+      - path: /esg-search
+        backend:
+          serviceName: esgf-search
+          servicePort: 8080

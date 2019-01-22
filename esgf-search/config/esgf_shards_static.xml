@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shards xmlns="http://www.esgf.org/whitelist">
+	<!-- this hostname must be reachable from the container where Solr is running -->
+	<!-- from solr-node-0/1/2: curl 'http://solr-load-balancer:8983/solr/datasets/select?q=*:*' -->
+	<value>solr-load-balancer/solr</value>
+</shards>
