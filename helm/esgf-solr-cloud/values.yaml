@@ -11,6 +11,9 @@ solr:
   numShardReplicas: 3
   maxShardsPerNode: 3
   
+esgf_search:
+  replicas: 1
+  
 ingress:
   hostname: local.esgf.org
 
