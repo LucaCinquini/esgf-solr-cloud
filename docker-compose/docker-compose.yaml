@@ -69,7 +69,7 @@ services:
       - "solr-foreground"
       - "-c"
       - "-p"
-      - "8984"
+      - "8983"
       - "-z"
       - "zookeeper:2181"
       - "-s"
