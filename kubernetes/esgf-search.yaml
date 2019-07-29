@@ -7,9 +7,11 @@ metadata:
     stack: esgf-solr-cloud
     component: esgf-search
 spec:
+  type: LoadBalancer
   ports:
   - name: tomcat-port
-    port: 8080
+    port: 80
+    targetPort: 8080
   selector:
     stack: esgf-solr-cloud
     component: esgf-search
