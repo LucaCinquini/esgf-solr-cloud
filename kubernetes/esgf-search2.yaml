@@ -15,3 +15,7 @@ spec:
   selector:
     stack: esgf-solr-cloud
     component: esgf-search
+  loadBalancerSourceRanges:
+    - "128.149.0.0/16"
+    - "137.78.0.0/16"
+    - "137.79.0.0/16"
