@@ -1,0 +1,17 @@
+# ESGF Search service
+apiVersion: v1
+kind: Service
+metadata:
+  name: esgf-search-public
+  labels:
+    stack: esgf-solr-cloud
+    component: esgf-search
+spec:
+  type: LoadBalancer
+  ports:
+  - name: tomcat-port
+    port: 80
+    targetPort: 8080
+  selector:
+    stack: esgf-solr-cloud
+    component: esgf-search
