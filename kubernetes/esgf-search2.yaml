@@ -1,21 +1,18 @@
-# ESGF Search service
+# ESGF Search service to expose functionality to esgf-bastion
 apiVersion: v1
 kind: Service
 metadata:
-  name: esgf-search-public
+  name: esgf-search-nodeport
   labels:
     stack: esgf-solr-cloud
     component: esgf-search
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - name: tomcat-port
-    port: 80
+    nodePort: 31000
+    port: 8080
     targetPort: 8080
   selector:
     stack: esgf-solr-cloud
     component: esgf-search
-  loadBalancerSourceRanges:
-    - "128.149.0.0/16"
-    - "137.78.0.0/16"
-    - "137.79.0.0/16"
